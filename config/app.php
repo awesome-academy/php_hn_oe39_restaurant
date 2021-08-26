@@ -123,6 +123,10 @@ return [
 
     'cipher' => 'AES-256-CBC',
 
+    'is_active' => 1,
+
+    'user_role_id' => 2,
+
     /*
     |--------------------------------------------------------------------------
     | Autoloaded Service Providers
