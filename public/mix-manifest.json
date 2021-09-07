@@ -5,5 +5,6 @@
     "/js/manage_review_comment.js": "/js/manage_review_comment.js",
     "/js/profile.js": "/js/profile.js",
     "/css/app.css": "/css/app.css",
+    "/css/manage_review_comment.css": "/css/manage_review_comment.css",
     "/css/home.css": "/css/home.css"
 }
