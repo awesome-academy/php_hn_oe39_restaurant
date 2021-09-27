@@ -11,4 +11,61 @@ class BookRepository extends BaseRepository implements BookRepositoryInterface
     {
         return Book::class;
     }
+
+    public function getAllBooksWithCategoriesAndImages()
+    {
+        return $this->model->with(['category', 'image'])
+            ->orderBy('updated_at', 'DESC')
+            ->paginate(config('app.paginate'));
+    }
+
+    public function getBookWithCategoryAndImageById($id)
+    {
+        return $this->model->with(['category', 'image'])->findOrFail($id);
+    }
+
+    public function getBookWithImageById($id)
+    {
+        return $this->model->with('image')->findOrFail($id);
+    }
+
+    public function prepareGetAllBooks()
+    {
+        return $this->model->with(['image', 'likes', 'reviews'])
+            ->withCount('likes as total_like')
+            ->withCount('reviews as total_review')
+            ->withSum('reviews as total_rate', 'rate');
+    }
+
+    public function getAllBooksWithImagesAndLikesAndRates()
+    {
+        return $this->prepareGetAllBooks()->get();
+    }
+
+    public function searchBooksByCategoryId($id)
+    {
+        return $this->prepareGetAllBooks()
+            ->where('category_id', $id)
+            ->get();
+    }
+
+    public function searchBooksByTitle($title)
+    {
+        return $this->prepareGetAllBooks()
+            ->where('title', 'like', '%' . $title . '%')
+            ->get();
+    }
+
+    public function getBookWithCategoryAndImageAndLikesById($id)
+    {
+        return $this->model->with(['category', 'image', 'likes'])->findOrFail($id);
+    }
+
+    public function getFavoriteBooksByUserId($user_id)
+    {
+        return $this->prepareGetAllBooks()
+            ->join('favorites', 'favorites.book_id', 'books.id')
+            ->where('user_id', $user_id)
+            ->get();
+    }
 }
