@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreBookRequest;
 use App\Http\Requests\UpdateBookRequest;
-use App\Notifications\BookNotification;
 use App\Notifications\FavoriteBookNotification;
 use App\Repositories\Book\BookRepositoryInterface;
 use App\Repositories\Category\CategoryRepositoryInterface;
+use App\Repositories\Comment\CommentRepositoryInterface;
 use App\Repositories\Favorite\FavoriteRepositoryInterface;
 use App\Repositories\Image\ImageRepositoryInterface;
 use App\Repositories\Like\LikeRepositoryInterface;
@@ -16,7 +16,6 @@ use App\Repositories\User\UserRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
-use Pusher\Pusher;
 
 class BookController extends Controller
 {
@@ -27,6 +26,7 @@ class BookController extends Controller
     protected $likeRepo;
     protected $favoriteRepo;
     protected $userRepo;
+    protected $commentRepo;
 
     public function __construct(
         BookRepositoryInterface $bookRepo,
@@ -35,7 +35,8 @@ class BookController extends Controller
         ReviewRepositoryInterface $reviewRepo,
         LikeRepositoryInterface $likeRepo,
         FavoriteRepositoryInterface $favoriteRepo,
-        UserRepositoryInterface $userRepo
+        UserRepositoryInterface $userRepo,
+        CommentRepositoryInterface $commentRepo
     ) {
         $this->bookRepo = $bookRepo;
         $this->categoryRepo = $categoryRepo;
@@ -44,6 +45,7 @@ class BookController extends Controller
         $this->likeRepo = $likeRepo;
         $this->favoriteRepo = $favoriteRepo;
         $this->userRepo = $userRepo;
+        $this->commentRepo = $commentRepo;
     }
     /**
      * Display a listing of the resource.
@@ -134,7 +136,8 @@ class BookController extends Controller
         if (isset($request->image)) {
             $file = $request->image;
             $path = $id . '_' . $file->getClientOriginalName();
-            $image = $this->bookRepo->getBookWithRelationsById($id, ['image'])->image;
+            $book = $this->bookRepo->getBookWithRelationsById($id, ['image']);
+            $image = $book->image;
             $this->imageRepo->update($image->id, ['path' => $path]);
             $file->move(public_path('uploads/books'), $path);
         }
@@ -264,9 +267,10 @@ class BookController extends Controller
 
     public function statistic()
     {
-        $books = json_encode($this->bookRepo->getAllBooksWithImagesAndLikesAndRates());
-        $bookComments = json_encode($this->bookRepo->getNumberOfCommentsOfBook());
+        $likes = json_encode($this->likeRepo->getLikesStatistic());
+        $reviews = json_encode($this->reviewRepo->getReviewsStatistic());
+        $comments = json_encode($this->commentRepo->getCommentsStatistic());
 
-        return view('admin.books.book_statistic', compact('books', 'bookComments'));
+        return view('admin.books.book_statistic', compact('likes', 'reviews', 'comments'));
     }
 }

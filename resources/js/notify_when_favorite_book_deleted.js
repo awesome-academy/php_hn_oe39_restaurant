@@ -24,16 +24,12 @@ echo.private(`favorite_book.${id}`).notification((notification) => {
     var bookNotificationHtml = `
         <div class="dropdown-divider"></div>
         <a href="/favorites/?markRead=${notification.id}" class="dropdown-item">
-            <i class="fas fa-book mr-2"> ` + 
-                translator.trans('messages.favorite-books') + 
-            `</i>
-            <div>
-                ${notification.book['title']}
-            </div>
-            <span class="float-right text-muted text-sm">` +
+            <i class="fas fa-book mr-2"></i>
+            <span>
+                <b><i>${notification.book['title']}</i></b> ` +
                 translator.trans('messages.has-been-deleted') +
-                ` ${date}
-            </span>
+            `</span>
+            <span class="float-right text-muted text-sm">${date}</span>
         </a>
     `;
     $('.menu-notification').prepend(bookNotificationHtml);
