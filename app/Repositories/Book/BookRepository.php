@@ -60,14 +60,4 @@ class BookRepository extends BaseRepository implements BookRepositoryInterface
             ->whereNull('favorites.deleted_at')
             ->get();
     }
-
-    public function getNumberOfCommentsOfBook()
-    {
-        return $this->model
-            ->join('reviews', 'reviews.book_id', 'books.id')
-            ->join('comments', 'comments.review_id', 'reviews.id')
-            ->select('books.title', DB::raw('count(*) as total_cmt'))
-            ->groupBy('books.id', 'books.title')
-            ->get();
-    }
 }

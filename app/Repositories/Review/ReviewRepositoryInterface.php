@@ -13,4 +13,6 @@ interface ReviewRepositoryInterface extends RepositoryInterface
     public function hideReviewById($id);
 
     public function showReviewById($id);
+
+    public function getReviewsStatistic();
 }

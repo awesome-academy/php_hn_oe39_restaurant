@@ -21,14 +21,16 @@ echo.private(`users.${id}`).notification((notification) => {
     let currentNotiCount = $('.notification-count').text();
 
     var newNotificationHtml = `
-            <div class="dropdown-divider"></div>
-            <a href="/users/${notification.user['id']}/?markRead=${notification.id}" class="dropdown-item">
-                <i class="fas fa-user-friends mr-2"></i>
-                <span>${notification.user['username']} ` + translator.trans('messages.followed-you') +
-            `   </span>
-                <span class="float-right text-muted text-sm">${date}</span>
-            </a>
-        `;
+        <div class="dropdown-divider"></div>
+        <a href="/users/${notification.user['id']}/?markRead=${notification.id}" class="dropdown-item">
+            <i class="fas fa-user-friends mr-2"></i>
+            <span>
+                <b><i>${notification.user['username']}</i></b> ` +
+                translator.trans('messages.followed-you') +
+            `</span>
+            <span class="float-right text-muted text-sm">${date}</span>
+        </a>
+    `;
 
     $('.menu-notification').prepend(newNotificationHtml);
     currentNotiCount++;

@@ -52,12 +52,13 @@
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item @if ($notification->read_at) read-noti @endif"
                                 href="{{ route('favorites.index', ['markRead'=>$noti_id]) }}">
-                                <i class="fas fa-book mr-2"> {{ __('messages.favorite-books') }}</i>
-                                <div>
-                                    {{ $notification->data['book']['title'] }}
-                                </div>
+                                <i class="fas fa-book mr-2"></i>
+                                <span>
+                                    <b><i>{{ $notification->data['book']['title'] }}</i></b>
+                                    {{ __('messages.has-been-deleted') }}
+                                </span>
                                 <span class="float-right text-muted text-sm">
-                                    {{ __('messages.has-been-deleted') }} {{ $notification->created_at->format('d-m-y H:i') }}
+                                    {{ $notification->created_at->format('d-m-y H:i') }}
                                 </span>
                             </a>
                         @endif
@@ -71,7 +72,7 @@
                                 href="{{ route('users.show', ['user'=> $id_user, 'markRead'=>$noti_id]) }}">
                                 <i class="fas fa-user-friends mr-2"></i>
                                 <span>
-                                    {{ $notification->data['user']['username'] }}
+                                    <b><i>{{ $notification->data['user']['username'] }}</i></b>
                                     {{ __('messages.followed-you') }}
                                 </span>
                                 <span class="float-right text-muted text-sm">{{ $notification->created_at->format('d-m-y H:i') }}</span>

@@ -13,4 +13,6 @@ interface LikeRepositoryInterface extends RepositoryInterface
     public function getLikeOfUserForBook($book_id, $user_id);
 
     public function getLikeOfUserForReview($review_id, $user_id);
+
+    public function getLikesStatistic();
 }

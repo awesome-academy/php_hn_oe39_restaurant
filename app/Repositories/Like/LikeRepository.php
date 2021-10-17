@@ -4,6 +4,7 @@ namespace App\Repositories\Like;
 
 use App\Models\Like;
 use App\Repositories\BaseRepository;
+use Illuminate\Support\Facades\DB;
 
 class LikeRepository extends BaseRepository implements LikeRepositoryInterface
 {
@@ -43,6 +44,16 @@ class LikeRepository extends BaseRepository implements LikeRepositoryInterface
         return $this->model->where('user_id', $user_id)
             ->where('likeable_type', 'App\Models\Review')
             ->where('likeable_id', $review_id)
+            ->get();
+    }
+
+    public function getLikesStatistic()
+    {
+        return $this->model
+            ->select(DB::raw('month(created_at) as month, count(*) as total_like'))
+            ->where(DB::raw('year(created_at)'), 2021)
+            ->where('likeable_type', 'App\Models\Book')
+            ->groupBy(DB::raw('month(created_at)'))
             ->get();
     }
 }

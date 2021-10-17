@@ -6,8 +6,8 @@ use App\Mail\MailNotifyFavoriteBook;
 use App\Repositories\Book\BookRepositoryInterface;
 use App\Repositories\Favorite\FavoriteRepositoryInterface;
 use App\Repositories\User\UserRepositoryInterface;
+use Exception;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -41,8 +41,12 @@ class SendEmailFavoriteBook implements ShouldQueue
         foreach ($userIds as $user_id) {
             $user = $userRepo->find($user_id);
             $favoriteBooks = $bookRepo->getFavoriteBooksByUserId($user_id);
-            Mail::to($user)
-                ->send(new MailNotifyFavoriteBook($user, $favoriteBooks));
+            try {
+                Mail::to($user)
+                    ->send(new MailNotifyFavoriteBook($user, $favoriteBooks));
+            } catch (Exception $e) {
+                continue;
+            }
         }
     }
 }

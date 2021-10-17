@@ -13,4 +13,6 @@ interface CommentRepositoryInterface extends RepositoryInterface
     public function hideCommentsByReviewId($review_id);
 
     public function showCommentsByReviewId($review_id);
+
+    public function getCommentsStatistic();
 }

@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Repositories\Book\BookRepository;
 use App\Repositories\Favorite\FavoriteRepository;
 use App\Repositories\User\UserRepository;
+use Exception;
 use Illuminate\Support\Facades\Mail;
 use Mockery;
 use Tests\TestCase;

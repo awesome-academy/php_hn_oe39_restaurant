@@ -4,6 +4,7 @@ namespace App\Repositories\Review;
 
 use App\Models\Review;
 use App\Repositories\BaseRepository;
+use Illuminate\Support\Facades\DB;
 
 class ReviewRepository extends BaseRepository implements ReviewRepositoryInterface
 {
@@ -37,5 +38,14 @@ class ReviewRepository extends BaseRepository implements ReviewRepositoryInterfa
     public function showReviewById($id)
     {
         return $this->update($id, ['display' => config('app.display')]);
+    }
+
+    public function getReviewsStatistic()
+    {
+        return $this->model
+            ->select(DB::raw('month(created_at) as month, count(*) as total_review'))
+            ->where(DB::raw('year(created_at)'), 2021)
+            ->groupBy(DB::raw('month(created_at)'))
+            ->get();
     }
 }
